@@ -1,0 +1,19 @@
+.form-container {
+    margin-top: 100px;
+}
+.message-form button {
+    width: 25%;
+}
+.message-form input {
+    width: 70%;
+}
+.post form {
+    display: inline-block;
+}
+.post form .glyphicon {
+    font-size: 20px;
+}
+.post-save {
+    width: 200px;
+    margin-bottom: 8px;
+}

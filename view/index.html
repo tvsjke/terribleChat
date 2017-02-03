@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Чат</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" type="text/css"  />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css" type="text/css"  />
+
+</head>
+<body>
+<div class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a target="_blank" href="#" class="navbar-brand">Чатик</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <?php if(!empty($data['user'])) { ?>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-user"></span>
+                        <strong><?php echo $data['user']['name'] ?></strong>
+                        <span class="glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="index.php?logout=true">Выйти<i class="glyphicon glyphicon-log-out pull-right"></i></a></li>
+                    </ul>
+                </li>
+                <?php } else { ?>
+                <li>
+                    <a href="log-in.php">Войти</a>
+                </li>
+                <li>
+                    <a href="sign-up.php">Зарегистрироваться</a>
+                </li>
+                <?php } ?>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="message-container col-md-6 col-md-offset-2">
+        <div class="message-form">
+            <form action="add.php" method="post">
+                <div class="form-group">
+                    <textarea class="form-control" name="txt_msg" placeholder="Новое сообщение" required ></textarea>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <input type="text" class="form-control pull-left" name="txt_homepage" placeholder="Ваша домашняя страница" />
+                    <button type="submit" name="btn-login" class="btn btn-block btn-primary pull-right">
+                        Написать
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="posts-container col-md-8 col-md-offset-2">
+        <?php foreach($data['posts'] as $post) { ?>
+        <div class="post" data-id="<?php echo $post['id']; ?>">
+            <h1>
+                <span class="post-homepage"><?php echo $post['homepage'] ?></span>
+                <?php if(!empty($post['is_own'])) { ?>
+                    <form action='delete.php' method="post">
+                        <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
+                        <a href="#" onclick="$(this).closest('form').submit()"><i class="glyphicon glyphicon-remove"></i></a>
+                        <a class="post-edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                    </form>
+                <?php } ?>
+            </h1>
+            <p class="post-msg"><?php echo html_entity_decode($post['post_text']) ?></p>
+            <div>
+                <span class="label label-info"><?php echo $post['author_name'] ?></span>
+            </div>
+        </div>
+        <?php } ?>
+        <nav>
+            <?php echo $data['pagination'] ?>
+        </nav>
+    </div>
+</div>
+
+</body>
+
+<script>
+    $('body').on('click', '.post-edit', function(e) {
+        var $inner = $(this).closest('.post');
+        var $homepage = $inner.find('.post-homepage');
+        var homepage_value = $homepage.html();
+        var $msg = $inner.find('.post-msg');
+        var msg_value = $msg.html();
+
+        $homepage.html('<input class="post-homepage-edit" value="' + homepage_value + '"/>');
+        $msg.html('<textarea class="post-msg-edit" rows="6" style="width:100%">' + msg_value + '</textarea>');
+        $('<button class="btn btn-block btn-primary post-save">Сохранить</button>').insertAfter($msg);
+    });
+
+    $('body').on('click', '.post-save', function(e) {
+
+        var $inner = $(this).closest('.post');
+        var post_id = $inner.data('id');
+        var post_homepage = $inner.find('.post-homepage-edit').val();
+        var post_msg = $inner.find('.post-msg-edit').val();
+
+        var data = {
+            'post_id' : post_id,
+            'post_homepage' : post_homepage,
+            'post_msg' : post_msg
+        };
+
+        console.log(data);
+
+        $.ajax({
+            url: 'edit.php',
+            type: 'post',
+            data: data,
+            dataType: 'json',
+            success: function (json) {
+
+                if (json['success']) {
+
+                    location.reload();
+
+                }
+            }
+        });
+    });
+
+</script>
+
+</html>
+
+

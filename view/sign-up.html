@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Регистрация</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" type="text/css"  />
+    <link rel="stylesheet" href="/css/style.css" type="text/css"  />
+
+</head>
+<body>
+<div class="container">
+    <div class="form-container col-md-4 col-md-offset-4">
+        <form method="post">
+            <h2>Регистрация</h2><hr />
+            <?php
+            if(!empty($data['error']))
+            {
+               foreach($data['error'] as $error)
+               {
+                  ?>
+            <div class="alert alert-danger">
+                <i class="glyphicon glyphicon-warning-sign"></i> &nbsp; <?php echo $error; ?>
+            </div>
+            <?php
+               }
+            }
+            else if(isset($_GET['joined']))
+            {
+                 ?>
+            <div class="alert alert-info">
+                <i class="glyphicon glyphicon-log-in"></i> &nbsp; Регистрация прошла успешно! Теперь вы можете <a href='log-in.php'>войти</a>, используя ваши логин и пароль
+            </div>
+            <?php
+            }
+            ?>
+            <div class="form-group">
+                <input type="text" class="form-control" name="txt_name" placeholder="Логин (минимум 3 символа)" value="<?php if(!empty($data['user'])){echo $name;}?>" pattern="[A-Za-zА-Яа-яЁё0-9]{3,}" required />
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="txt_mail" placeholder="Email" value="<?php if(!empty($data['user'])){echo $mail;}?>" required />
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="txt_pass" placeholder="Пароль (минимум 8 символов)" pattern="[A-Za-zА-Яа-яЁё0-9]{8,}" required />
+            </div>
+            <div class="clearfix"></div><hr />
+            <div class="form-group">
+                <button type="submit" class="btn btn-block btn-primary" name="btn-signup">
+                    <i class="glyphicon glyphicon-share"></i>&nbsp;Зарегистрироваться
+                </button>
+            </div>
+            <br />
+            <label>Уже есть аккаунт ? <a href="log-in.php">Войдите</a></label>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
