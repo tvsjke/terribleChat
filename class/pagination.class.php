@@ -6,7 +6,7 @@ class Pagination {
         $output = '<ul class="pager">';
 
         if($current_page == 1) {
-            if($total_pages != 1) {
+            if($total_pages > 1) {
                 $output .= '<li><a href="index.php?page='. ++$current_page .'">Вперед</a></li>';
             }
         }

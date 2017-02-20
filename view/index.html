@@ -46,6 +46,7 @@
 </div>
 <div class="container">
     <div class="message-container col-md-6 col-md-offset-2">
+        <?php if($data['user']) { ?>
         <div class="message-form">
             <form action="add.php" method="post">
                 <div class="form-group">
@@ -60,25 +61,30 @@
                 </div>
             </form>
         </div>
+        <?php } ?>
     </div>
     <div class="posts-container col-md-8 col-md-offset-2">
-        <?php foreach($data['posts'] as $post) { ?>
-        <div class="post" data-id="<?php echo $post['id']; ?>">
-            <h1>
-                <span class="post-homepage"><?php echo $post['homepage'] ?></span>
-                <?php if(!empty($post['is_own'])) { ?>
-                    <form action='delete.php' method="post">
-                        <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
-                        <a href="#" onclick="$(this).closest('form').submit()"><i class="glyphicon glyphicon-remove"></i></a>
-                        <a class="post-edit"><i class="glyphicon glyphicon-pencil"></i></a>
-                    </form>
-                <?php } ?>
-            </h1>
-            <p class="post-msg"><?php echo html_entity_decode($post['post_text']) ?></p>
-            <div>
-                <span class="label label-info"><?php echo $post['author_name'] ?></span>
+        <?php if($data['posts']) { ?>
+            <?php foreach($data['posts'] as $post) { ?>
+            <div class="post" data-id="<?php echo $post['id']; ?>">
+                <h1>
+                    <span class="post-homepage"><?php echo $post['homepage'] ?></span>
+                    <?php if(!empty($post['is_own'])) { ?>
+                        <form action='delete.php' method="post">
+                            <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
+                            <a href="#" onclick="$(this).closest('form').submit()"><i class="glyphicon glyphicon-remove"></i></a>
+                            <a class="post-edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                        </form>
+                    <?php } ?>
+                </h1>
+                <p class="post-msg"><?php echo html_entity_decode($post['post_text']) ?></p>
+                <div>
+                    <span class="label label-info"><?php echo $post['author_name'] ?></span>
+                </div>
             </div>
-        </div>
+            <?php } ?>
+        <?php } else { ?>
+        <h1>Пусто :(</h1>
         <?php } ?>
         <nav>
             <?php echo $data['pagination'] ?>

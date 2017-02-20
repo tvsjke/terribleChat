@@ -4,7 +4,7 @@ if (file_exists('startup.php')) {
     require_once('startup.php');
 }
 
-if(isset($_POST['txt_msg'])) {
+if(isset($_POST['txt_msg']) && $user->is_logged()) {
     $msg = trim($_POST['txt_msg']);
     $homepage = isset($_POST['txt_homepage']) ? trim($_POST['txt_homepage']) :'';
 
